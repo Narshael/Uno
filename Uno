@@ -1,1 +1,61 @@
+import random
+
+colours= ("Red", "Yellow", "Blue", "Green")
+
+ranks = list(range(1, 11))
+
+deck = [(rank, colour) for rank in ranks for colour in colours]
+
+random.shuffle(deck)
+
+def start_game(deck):
+
+    p1 = [deck.pop(0) for _ in range(7)]
+    p2 = [deck.pop(0) for _ in range(7)]
+    face_up = deck.pop(0)
+    main_loop(p1, p2, face_up, deck)
+
+def main_loop(p1, p2, face_up, deck):
+    current = 0
+    while len(p1) > 0 and len(p2) > 0:
+        print(f"it is player {current + 1}' s turn")
+        print(f"The face up card is {face_up}")
+        print(f"Player {current + 1}'s hand is {p1}")
+
+        ans = int(input("Would you like to play(enter 1) or draw(enter 2): "))
+        if ans == 1:
+           # user wants to play
+           #they want to play
+           #we have to show the user the cards
+           index = int(input("What is the card you want to play (starting at 1)")) - 1
+           is_valid = valid_play(face_up, p1[index])
+           if is_valid:
+               face_up = p1.pop(index)
+               uno(p1,deck)
+               result(p1,deck)
+           #the player chose a correct card
+           #pop the chosen card, overtime face_up
+           #change the current draw
+        else:
+            p1.append(deck.pop(0))
+        p1,p2 = p2,p1 # player 1 has player two's hand
+        current = (current + 1) % 2
+
+def uno(p1,deck):
+    if len(p1) == 1:
+        player_input = input("SAY UNO?")
+        if player_input.strip().lower() != "uno":
+            p1.append(deck.pop(0))
+            p1.append(deck.pop(0))
+
+def result(p1,deck):
+    if len(p1) == 0:
+        winner = input("WINNER WINNER CHICKEN DINNER!")
+
+def valid_play(face_up, card):
+    if face_up[0] == card[0] or face_up[1] == card[1]:
+        return True
+    else:
+        return False
+
 
